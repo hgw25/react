@@ -1,0 +1,48 @@
+
+.am-input-control{
+    position:relative;
+}
+.l-btn {
+  position: absolute;
+  right: -4.32rem;
+  bottom: 0.82rem; /*no*/
+}
+.btn-2{
+    background-color: orange;
+    border:none !important;
+}
+.btn-3{
+    border:2px solid orange !important;
+    color: orange;
+    margin-top: 0.2rem;
+    font-size: 0.32rem;
+}
+.loginbottom {
+    margin-top: 2rem;
+    .loginbottom-top {
+      .line {
+        width: 33%;
+        border-bottom: 2px solid #e1e1e1;
+        float: left;
+        margin: 0.18rem 0.2rem;
+      }
+      .party {
+        font-size: 0.24rem;
+        float: left;
+        color: #aaa;
+      }
+    }
+    ul {
+      text-align: center;
+      background-color: #fff;
+      li {
+        margin-top: 0.4rem;
+        float: left;
+        width: 25%;
+        color: #aaa;
+        .threelogin {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
