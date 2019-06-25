@@ -26,7 +26,6 @@ const hotRender = ()=>{
     )
 }
 
-
 hotRender();
 
 // ReactDOM.render(<IndexView/>,rootEle)

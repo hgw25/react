@@ -2,7 +2,7 @@ import "./index.scss"
 // import {Head} from "~/components/head"
 import { SearchBar, Button, WhiteSpace, WingBlank, Grid, List, Carousel } from 'antd-mobile';
 import { connect } from "react-redux";
-import { getBanner } from "../../actions";
+import { getFood } from "../../actions";
 
 
 @connect(
@@ -41,7 +41,7 @@ export class Home extends Component {
     }
     componentWillMount() {
         const { dispatch } = this.props;
-        dispatch(getBanner({
+        dispatch(getFood({
             url: "/react/food",
             cb() { }
         }))

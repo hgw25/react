@@ -1,6 +1,8 @@
 import {combineReducers} from "redux"
 import food from "./food"
+import searchList from "./search"
 
 export const reducers = combineReducers({
-    food:food
+    food:food,
+    searchList:searchList
 })
