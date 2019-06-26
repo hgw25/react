@@ -101,6 +101,7 @@ export class Login extends Component {
                 delete sessionStorage['userInfo']
             }
         })
+        window.localStorage.setItem('loginname',this.refs.mobile.state.value)
     }
     goRegister = () => {
         const { history } = this.props;

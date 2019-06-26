@@ -45,3 +45,10 @@ export const getReverseFood = () =>{
         type:"getReverseFood"
     }
 }
+
+export const saveItem = (item) =>{
+    return {
+        type:"saveItem",
+        item
+    }
+}

@@ -12,9 +12,9 @@
   }
 }
 .login {
-    position: absolute;
-    left: 0;
-    top: 1rem;
+    // position: absolute;
+    // left: 0;
+    // top: 1rem;
     width: 92%;
     
   .head {
@@ -23,7 +23,8 @@
     height: 1.5rem;
     border-radius: 0.1rem;
     line-height: 1.5rem;
-    box-shadow: #eee;
+    // box-shadow: #eee;
+    box-shadow: 3px 5px 5px #e1e1e1;
     i{
       float: left;
       width: 1rem;
@@ -40,7 +41,7 @@
   }
 }
 .grid{
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 .my-list{
   margin-top: 0.2rem;

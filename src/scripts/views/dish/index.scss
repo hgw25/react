@@ -1,0 +1,21 @@
+.dish{
+    background-color: #fff;
+    .lili{
+        float: left;
+        width: 45%;
+        padding:0 2.5%;
+        background-color: #fff;
+        margin-top: 0.1rem;
+        img{
+            display: inline-block;
+            width: 100%;
+            border-radius: 0.2rem;
+        }
+        p{
+            font-size: 0.3rem;
+            color:#000;
+            margin: 0.2rem 0;
+            font-weight: 550;
+        }
+    }
+}

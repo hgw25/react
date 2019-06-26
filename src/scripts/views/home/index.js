@@ -66,7 +66,7 @@ export class Home extends Component {
                     </div>
                     <i className="iconfont right icon-cailan"></i>
                 </div>
-                <Grid className="grid" data={data} hasLine={false} />
+                <Grid itemStyle={{marginTop:'1rem'}} data={data} hasLine={false} />
                 <List className="my-list">
                     <Item extra="更多" arrow="horizontal" onClick={() => { }}>热门兴趣·家常菜</Item>
                 </List>
