@@ -8,7 +8,8 @@ import {Register} from "./register";
 import {Search} from "./search";
 import {Comment} from "./comment";
 import { Dish } from "./dish";
-
+import {FoodDetails} from "./foodDetails"
+import {DetailsComment} from "./detailsComment"
 export class IndexView extends Component{
     render(){
         return (
@@ -39,6 +40,8 @@ export class Layout extends Component{
                 <Route path="/search" component={Search}/>
                 <Route path="/comment" component={Comment}/>
                 <Route path="/dish" component={Dish}/>
+                <Route path="/foodDetails" component={FoodDetails}/>
+                <Route path="/detailsComment" component={DetailsComment}/>
                 <Route render={
                     ()=>(<Redirect to="/app/"/> )
                 }/>

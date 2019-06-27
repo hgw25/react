@@ -52,3 +52,32 @@ export const saveItem = (item) =>{
         item
     }
 }
+
+export const addInfo=({url,params,cb})=>{
+    return axios.post(url,{params}).then(res=>{
+        cb();
+        return {
+            type:"evaluate",
+        }
+    })
+}
+
+export const getInfo=({url,cb})=>{
+    return axios.get(url).then(res=>{
+        cb();
+        return {
+            type:"getInfo",
+            getInfo:res.data.result
+        }
+    })
+}
+
+export const getCommentInfo=({url,cb})=>{
+    return axios.get(url).then(res=>{
+        cb();
+        return {
+            type:"getCommentInfo",
+            commentInfo:res.data.result
+        }
+    })
+}

@@ -1,6 +1,6 @@
 import "./index.scss"
 import { WingBlank, WhiteSpace, SearchBar } from 'antd-mobile';
-import { searchList ,saveItem} from "../../actions"
+import { searchList, saveItem } from "../../actions"
 import { connect } from "react-redux";
 @connect(
     state => ({
@@ -20,9 +20,10 @@ export class Dish extends Component {
             cb() { }
         }))
     }
-    goComment=(item)=>{
+    goComment = (item) => {
         const { dispatch } = this.props;
         dispatch(saveItem(item))
+        console.log(item)
         this.props.history.push("/comment")
     }
     componentWillMount() {
@@ -53,18 +54,18 @@ export class Dish extends Component {
                     <WhiteSpace />
                 </WingBlank>
                 {/* <WingBlank> */}
-                    <ul className="cl">
-                        {
-                            searchList.map((item, index) => {
-                                return (
-                                    <li  onClick={()=>{this.goComment(item)}} className="lili" key={index}>
-                                        <img src={item.img} alt="" />
-                                        <p className="sl">{item.title}</p>
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
+                <ul className="cl">
+                    {
+                        searchList.map((item, index) => {
+                            return (
+                                <li onClick={() => { this.goComment(item) }} className="lili" key={index}>
+                                    <img src={item.img} alt="" />
+                                    <p className="sl">{item.title}</p>
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
                 {/* </WingBlank> */}
             </div>
         )

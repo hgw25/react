@@ -1,8 +1,8 @@
 import "./index.scss";
 import { Head } from "~/components/head";
 import { connect } from "react-redux";
-import { getFoodType, getFoodList } from "../../actions";
-import { Tabs, WhiteSpace,List } from 'antd-mobile';
+import { getFoodType, getFoodList,saveItem } from "../../actions";
+import { Tabs, WhiteSpace, List } from 'antd-mobile';
 
 
 
@@ -14,30 +14,36 @@ import { Tabs, WhiteSpace,List } from 'antd-mobile';
     }
 )
 export class Classify extends Component {
+    goFoodDetails=(item)=>{
+            const { dispatch } = this.props;
+            dispatch(saveItem(item))
+            console.log(item)
+        this.props.history.push("/foodDetails")
+    }
     renderContent = newTabs =>
-        ( console.log("99999"),
+        (console.log("99999"),
             console.log(this.props.foodList),
-        <ul style={{paddingBottom: "2rem", backgroundColor: '#fff' }}>
-            {
-                this.props.foodList.filter((g)=>g.type==newTabs.title).map((item,i)=>{
-                    return (
-                        <li className="li cl" key={i}>
-                            <img src={item.img} alt=""/>
-                            <div className="div">
-                                <h2 className="cl">{item.title}</h2>
-                                <p className="p1 sl">{item.pbm}</p>
-                                <p className="p2">{item.author}</p>
-                                <p className="p3">
-                                    <span className="span1">{item.collectionNum}人收藏</span>
-                                    <span className="span2">{item.commentNum}人点赞</span>
-                                </p>
-                            </div>
-                        </li>
-                    )
-                })
-            }
-        </ul>)
-    goSearch=()=>{
+            <ul style={{ paddingBottom: "2rem", backgroundColor: '#fff' }}>
+                {
+                    this.props.foodList.filter((g) => g.type == newTabs.title).map((item, i) => {
+                        return (
+                            <li onClick={()=>this.goFoodDetails(item)} className="li cl" key={i}>
+                                <img src={item.img} alt="" />
+                                <div className="div">
+                                    <h2 className="cl">{item.title}</h2>
+                                    <p className="p1 sl">{item.pbm}</p>
+                                    <p className="p2">{item.author}</p>
+                                    <p className="p3">
+                                        <span className="span1">{item.collectionNum}人收藏</span>
+                                        <span className="span2">{item.commentNum}人点赞</span>
+                                    </p>
+                                </div>
+                            </li>
+                        )
+                    })
+                }
+            </ul>)
+    goSearch = () => {
         this.props.history.push("/search")
     }
     componentWillMount() {
@@ -48,7 +54,7 @@ export class Classify extends Component {
         }))
         dispatch(getFoodList({
             url: "/react/getFoodList",
-            cb() {}
+            cb() { }
         }))
     }
     render() {
@@ -81,7 +87,7 @@ export class Classify extends Component {
                         </div>
                     </div>
                     <WhiteSpace />
-                    <Tabs tabs={newTabs} tabBarActiveTextColor='orange' tabBarUnderlineStyle={{borderColor:'orange'}} renderTabBar={props => <Tabs.DefaultTabBar {...props} page={4} />}>
+                    <Tabs tabs={newTabs} tabBarActiveTextColor='orange' tabBarUnderlineStyle={{ borderColor: 'orange' }} renderTabBar={props => <Tabs.DefaultTabBar {...props} page={4} />}>
                         {this.renderContent}
                     </Tabs>
                     <WhiteSpace />

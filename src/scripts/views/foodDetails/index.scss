@@ -1,0 +1,24 @@
+.detailsFoot{
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: #fff;
+    border-radius: 0.2rem 0.2rem 0 0;
+    z-index: 10;
+    li{
+        float: left;
+        width: 33.3%;
+        line-height: 0.8rem;
+        i{
+            vertical-align:text-top;
+            font-size: 0.35rem;
+            margin-right:0.2rem
+        }
+        span{
+            vertical-align:text-top;
+            font-size: 0.3rem;
+        }
+    }
+}
