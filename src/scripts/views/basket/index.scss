@@ -1,0 +1,30 @@
+.li{
+    padding: 2%;
+    img{
+      border-radius: 0.2rem;
+      float: left;
+      width: 40%;
+      height: 2rem;
+    }
+    .div{
+      padding: 1% 2%;
+      width: 56%;
+      float: left;
+      text-align: left;
+      h2{
+        font-size:0.3rem;
+        font-weight:550;
+        color:#000;  
+      }
+      .p1{
+        margin: 5% 0;
+        color:#000;
+      }
+      .p3{
+        margin-top:12%;
+        .span1{
+          margin-right: 0.2rem;
+        }
+      }
+    }
+  }

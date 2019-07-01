@@ -1,10 +1,31 @@
 
 import "./index.scss";
-import { NavBar, Icon, Tabs, WhiteSpace, WingBlank, List, InputItem, Button ,Toast} from 'antd-mobile';
+import { NavBar, Icon, Tabs, WhiteSpace, WingBlank, List, InputItem, Button, Toast } from 'antd-mobile';
 import axios from "@/utils/axios"
 const mobileReg = /^1(3|5|7|8|9)\d{9}$/;
 const codeReg = /^\d{4}$/;
 var timer = null;
+var shares = null;
+var auths = null;
+document.addEventListener("plusready", plusReady,false);
+
+ function  plusReady () {
+    // 			getNetWork();
+    getAuthServices()
+
+}
+
+
+
+// 获取第三方登录的服务列表 
+function getAuthServices () {
+    plus.oauth.getServices((services) => {
+        auths = services;
+        console.log(JSON.stringify(auths));
+    }, (e) => {
+        plus.nativeUI.alert("获取登录授权服务列表失败：");
+    })
+}
 export class Login extends Component {
 
     state = {
@@ -13,8 +34,34 @@ export class Login extends Component {
         flag: true,
         count: 60,
         txt: "获取验证码",
-        loginInfo:{}
+        loginInfo: {}
     };
+    // 调用硬件必须先执行  设备准备好这个回调 
+
+
+    authLogin = (id) => {
+        var that=this;
+        for (var s in auths) {
+            if (auths[s].id == id) {
+                var obj = auths[s];
+                obj.login(function (e) {
+                    plus.nativeUI.alert("登录认证成功!");
+                    obj.getUserInfo(function (e) {
+                        localStorage.setItem("loginname",obj.userInfo.nickname)
+                        that.props.history.push("/app/my")
+                        // plus.nativeUI.alert("获取用户信息成功：" + JSON.stringify(obj.userInfo));
+                    }, function (e) {
+                        plus.nativeUI.alert("获取用户信息失败： " );
+                    });
+                }, function (e) {
+                    plus.nativeUI.alert("登录认证失败: ");
+                });
+            }
+        }
+    }
+
+
+
 
     checkMobile = (mobile) => {
         console.log(mobile);
@@ -101,15 +148,15 @@ export class Login extends Component {
                 delete sessionStorage['userInfo']
             }
         })
-        window.localStorage.setItem('loginname',this.refs.mobile.state.value)
+        window.localStorage.setItem('loginname', this.refs.mobile.state.value)
     }
     goRegister = () => {
         const { history } = this.props;
         history.push("/register")
     }
-    login=()=>{
-        this.state.loginInfo.username=this.refs.username.state.value;
-        this.state.loginInfo.pwd=this.refs.pwd.state.value;
+    login = () => {
+        this.state.loginInfo.username = this.refs.username.state.value;
+        this.state.loginInfo.pwd = this.refs.pwd.state.value;
         console.log(this.state.loginInfo)
         if (this.state.loginInfo.username && this.state.loginInfo.pwd) {
             axios.post("/react/login", this.state.loginInfo).then(res => {
@@ -119,7 +166,7 @@ export class Login extends Component {
                 }
             });
         } else {
-            Toast.info("账号或密码不正确",2)
+            Toast.info("账号或密码不正确", 2)
         }
     }
     render() {
@@ -128,10 +175,10 @@ export class Login extends Component {
             { title: '验证码登录' }
         ];
         const party = [
-            { name: "QQ", icon: "icon-QQ" },
-            { name: "微信", icon: "icon-weixin" },
-            { name: "新浪微博", icon: "icon-qunfengxinlangweibo" },
-            { name: "支付宝", icon: "icon-zhifubao" }
+            { name: "QQ",key:'qq', icon: "icon-QQ" },
+            { name: "微信",key:'weixin', icon: "icon-weixin" },
+            { name: "新浪微博",key:'sinaweibo', icon: "icon-qunfengxinlangweibo" },
+            { name: "支付宝",key:'zhifubao', icon: "icon-zhifubao" }
         ];
         const {
             toggle,
@@ -154,7 +201,7 @@ export class Login extends Component {
                     onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '10rem', backgroundColor: '#fff' }}>
-                        <WingBlank>
+                        {/* <WingBlank size="sm"> */}
                             <List>
                                 <WhiteSpace />
                                 <InputItem
@@ -174,7 +221,7 @@ export class Login extends Component {
                                 <Button className="btn-2" type="primary" onClick={this.login}>马上登录</Button>
                                 <Button className="btn-3" onClick={this.goRegister}>没有账号,立即注册</Button><WhiteSpace />
                                 <div className="loginbottom">
-                                    <div className="loginbottom-top">
+                                    <div className="loginbottom-top cl">
                                         <div className="line"></div>
                                         <span className="party">第三方登录</span>
                                         <div className="line"></div>
@@ -183,7 +230,7 @@ export class Login extends Component {
                                         {
                                             party.map((item, index) => {
                                                 return (
-                                                    <li key={index}>
+                                                    <li key={index} onClick={() => this.authLogin(item.key)}>
                                                         <i className={"iconfont threelogin " + item.icon}></i>
                                                         <p>{item.name}</p>
                                                     </li>
@@ -193,7 +240,7 @@ export class Login extends Component {
                                     </ul>
                                 </div>
                             </List>
-                        </WingBlank>
+                        {/* </WingBlank> */}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '10rem', backgroundColor: '#fff' }}>
                         <WingBlank>

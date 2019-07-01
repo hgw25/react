@@ -121,11 +121,11 @@ module.exports = {
         publicPath:"",
         proxy:{  // 反向代理 
             "/vue": {
-                target:"http://localhost:1901/",
+                target:"http://47.101.154.35:9595/",
                 changeOrigin: true,
             },
             "/react": {
-                target:"http://localhost:1901/",
+                target:"http://47.101.154.35:9595/",
                 changeOrigin: true,
             }
         }

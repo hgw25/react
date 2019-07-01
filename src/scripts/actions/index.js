@@ -72,12 +72,51 @@ export const getInfo=({url,cb})=>{
     })
 }
 
-export const getCommentInfo=({url,cb})=>{
-    return axios.get(url).then(res=>{
+export const getCommentInfo=({url,params,cb})=>{
+    return axios.get(url,{params}).then(res=>{
         cb();
         return {
             type:"getCommentInfo",
             commentInfo:res.data.result
         }
     })
+}
+
+
+//收藏
+
+export const OBSERVEGAME = 'observeGame'
+export const observeGame = ({url,params})=>{
+  return axios.get(url,{params}).then(res=>{
+    return {
+      type:OBSERVEGAME,
+      isObserve: true
+    }
+  })
+}
+//取消收藏
+
+export const CANCELOBSERVE = "cancelObserve"
+export const cancelObserve =({url,params})=>{
+  return axios.get(url,{params}).then(res=>{
+    return {
+      type:CANCELOBSERVE,
+      isObserve: false
+    }
+  })
+}
+
+
+
+//判断是否收藏
+export const GETISOBSERVE = "getIsObserve"
+export const getIsObserve = ({url,params}) => {
+  return axios.get(url, {params}).then(res => {
+    console.log(res.data.result)
+    var flag = res.data.result == null ? false : true
+    return {
+      type: GETISOBSERVE,
+      isObserve: flag
+    }
+  })
 }

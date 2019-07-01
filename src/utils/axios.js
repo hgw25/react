@@ -2,7 +2,7 @@
 import axios from "axios";
 
 
-// axios.defaults.baseURL = "http://localhost:1901/";  // 基本路径 
+axios.url = "http://47.101.154.35:9595/";  // 基本路径 
 
 
 // 前端 数据请求  配置 header  添加 token  

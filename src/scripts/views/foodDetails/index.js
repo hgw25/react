@@ -1,38 +1,118 @@
 import "./index.scss"
-import { NavBar, Icon, Card, WingBlank, WhiteSpace } from 'antd-mobile';
+import { NavBar, Icon, Card, WingBlank, WhiteSpace ,Modal} from 'antd-mobile';
 import { connect } from "react-redux";
-import { getCommentInfo } from "../../actions";
-import {Star} from "@/scripts/components/star"
-
+import { getCommentInfo, observeGame, cancelObserve, getIsObserve } from "../../actions";
+import { Star } from "@/scripts/components/star";
+import { LikeBtn } from "@/scripts/components/likeBtn";
+const alert = Modal.alert;
 @connect(
     state => ({
         ...state.item,
-        ...state.evaluate
+        ...state.evaluate,
+        ...state.collection
     })
 )
 export class FoodDetails extends Component {
     goDetailsComment = () => {
-        this.props.history.push("/detailsComment")
+        let username = localStorage.getItem("loginname")
+        if (username) {
+            this.props.history.push("/detailsComment")
+        } else {
+            alert('未登录', '是否去登陆?', [
+                { text: '取消', onPress: () => console.log('cancel') },
+                {
+                    text: '确定',
+                    onPress: () =>
+                        new Promise((resolve) => {
+                            this.props.history.push('/login')
+                            setTimeout(resolve, 500);
+                        }),
+                },
+            ])
+        }
+        
+    }
+
+    changeObserve = () => {
+        let username = localStorage.getItem("loginname")
+        if (username) {
+            const { dispatch, item, isObserve } = this.props;
+            const collectionId = item._id;
+            const username = localStorage.getItem("loginname")
+            if (!isObserve) {
+                dispatch(observeGame({
+                    url: "/react/observegame",
+                    params: {
+                        title: item.title,
+                        img: item.img,
+                        author: item.author,
+                        commentNum: item.commentNum,
+                        collectionNum: item.collectionNum,
+                        pbm: item.pbm,
+                        username: username,
+                        collectionId: collectionId
+                    }
+                }
+                ))
+            } else {
+                dispatch(cancelObserve({
+                    url: "/react/cancelobserve",
+                    params: {
+                        username,
+                        collectionId,
+                    }
+                }
+                ))
+            }
+        } else {
+            alert('未登录', '是否去登陆?', [
+                { text: '取消', onPress: () => console.log('cancel') },
+                {
+                    text: '确定',
+                    onPress: () =>
+                        new Promise((resolve) => {
+                            this.props.history.push('/login')
+                            setTimeout(resolve, 500);
+                        }),
+                },
+            ])
+        }
+       
     }
     componentWillMount() {
+        console.log(this.props.item)
         const { dispatch } = this.props;
+        const foodId = this.props.item._id;
+        console.log(foodId)
+        const username = localStorage.getItem("loginname")
+        const collectionId = this.props.item._id;
         dispatch(getCommentInfo({
             url: "/react/getCommentInfo",
+            params: { foodId: foodId },
             cb() { }
         }))
+        dispatch(getIsObserve({
+            url: "/react/getisobserve",
+            params: {
+                username,
+                collectionId
+            }
+        }
+        ))
     }
     render() {
         console.log(this.props)
-        const { item, commentInfo } = this.props
+        const { item, commentInfo, isObserve } = this.props
+        const like = item.commentNum
         return (
             <div>
                 <NavBar
                     mode="light"
                     icon={<Icon type="left" />}
-                    onLeftClick={() => this.props.history.push('/app/classify')}
-                    style={{ position: 'fixed', left: 0, top: 0, width: "100%" }}
+                    onLeftClick={() => this.props.history.go(-1)}
+                    style={{ position: 'fixed', left: 0, top: 0, width: "100%", zIndex: 10 }}
                 >详情</NavBar>
-                <div style={{ width: "100%", backgroundColor: '#fff', paddingTop: '1rem' }}>
+                <div style={{ width: "96%", backgroundColor: '#fff', padding: '1rem 2% 0' }}>
                     <img style={{ width: "100%", height: '5rem', borderRadius: '0.2rem' }} src={item.img} alt="" />
                 </div>
                 <div style={{ backgroundColor: '#fff', padding: '0.4rem 0.2rem' }}>
@@ -51,16 +131,19 @@ export class FoodDetails extends Component {
                     </div>
                     <p className="sl-2" style={{ fontSize: '0.3rem', paddingTop: '0.3rem', borderTop: '1px solid #eee' }}>{item.pbm}</p>
                 </div>
-
                 <WingBlank size="sm">
                     <WhiteSpace size="sm" />
+                    <p style={{ fontSize: '0.3rem', color: '#000', margin: '0.2rem 0' }}>评论区 :</p>
                     <Card>
                         <Card.Header
                             className="sl"
-                            title={item.title}
+                            title={<div><p style={{ lineHeight: "0.3rem", marginBottom: '0.2rem' }}>{item.title}</p>
+                                <p style={{ float: 'left', lineHeight: '0.3rem', marginRight: '0.1rem' }}>美味level : </p>
+                                <Star name={item.score * 2}></Star>
+                            </div>}
                             thumb={item.img}
                             thumbStyle={{ borderRadius: '0.2rem', height: '1rem', marginRight: '0.3rem' }}
-                            extra={<span>this is extra</span>}
+                            // extra={<span>this is extra</span>}
                             style={{ color: "red", lineHeight: 0, fontSize: '0.3rem' }}
                         />
                         <Card.Body>
@@ -78,10 +161,13 @@ export class FoodDetails extends Component {
                                 <Card>
                                     <Card.Header
                                         className="sl"
-                                        title={item.title}
+                                        title={<div><p style={{ lineHeight: "0.3rem", marginBottom: '0.2rem' }}>{item.title}</p>
+                                            <p style={{ float: 'left', lineHeight: '0.3rem', marginRight: '0.1rem' }}>美味level : </p>
+                                            <Star name={item.score * 2}></Star>
+                                        </div>}
                                         thumb={item.img}
                                         thumbStyle={{ borderRadius: '0.2rem', height: '1rem', marginRight: '0.3rem' }}
-                                        extra={<Star name={commentInfo.score}></Star>}
+                                        // extra={<Star name={item.score*2}></Star>}
                                         style={{ color: "red", lineHeight: 0, fontSize: '0.3rem' }}
                                     />
                                     <Card.Body>
@@ -101,13 +187,14 @@ export class FoodDetails extends Component {
                             <i className="iconfont icon-duihuakuang4"></i>
                             <span>评论</span>
                         </li>
-                        <li>
-                            <i className="iconfont icon-dianzan"></i>
-                            <span>点赞</span>
+                        <li className="sl">
+                            <LikeBtn like={like}></LikeBtn>
                         </li>
-                        <li>
-                            <i className="iconfont icon-star" style={{ fontSize: '0.24rem' }}></i>
-                            <span>收藏</span>
+                        <li className="sl">
+                            <div onClick={this.changeObserve} style={{ color: isObserve ? 'orange' : '' }}>
+                                <i className="iconfont icon-star" style={{ fontSize: '0.24rem' }}></i>
+                                <span>{isObserve ? '取消收藏' : '收藏'}</span>
+                            </div>
                         </li>
                     </ul>
                 </div>

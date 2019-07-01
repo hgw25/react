@@ -8,8 +8,10 @@ import {Register} from "./register";
 import {Search} from "./search";
 import {Comment} from "./comment";
 import { Dish } from "./dish";
-import {FoodDetails} from "./foodDetails"
-import {DetailsComment} from "./detailsComment"
+import {FoodDetails} from "./foodDetails";
+import {DetailsComment} from "./detailsComment";
+import {Material} from "./material";
+import {Basket} from "./basket";
 export class IndexView extends Component{
     render(){
         return (
@@ -42,6 +44,8 @@ export class Layout extends Component{
                 <Route path="/dish" component={Dish}/>
                 <Route path="/foodDetails" component={FoodDetails}/>
                 <Route path="/detailsComment" component={DetailsComment}/>
+                <Route path="/material" component={Material}/>
+                <Route path="/basket" component={Basket}/>
                 <Route render={
                     ()=>(<Redirect to="/app/"/> )
                 }/>

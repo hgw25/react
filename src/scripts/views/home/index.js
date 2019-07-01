@@ -1,10 +1,11 @@
 import "./index.scss"
 // import {Head} from "~/components/head"
-import { SearchBar, Button, WhiteSpace, WingBlank, Grid, List, Carousel } from 'antd-mobile';
-import { connect } from "react-redux";
+import { SearchBar, Grid, List, Carousel, Modal, Button, WhiteSpace, WingBlank, Toast } from 'antd-mobile';
 import { getFood } from "../../actions";
+import { saveItem } from "../../actions"
+import { connect } from "react-redux";
 
-
+const alert = Modal.alert;
 @connect(
     state => {
         return {
@@ -46,56 +47,76 @@ export class Home extends Component {
             cb() { }
         }))
     }
+    goDetails = (item) => {
+        const { dispatch } = this.props;
+        dispatch(saveItem(item))
+        console.log(item)
+        this.props.history.push("/foodDetails")
+    }
+    goBasket = () => {
+        let username = localStorage.getItem("loginname")
+        if (username) {
+            this.props.history.push("/basket")
+        } else {
+            alert('未登录', '是否去登陆?', [
+                { text: '取消', onPress: () => console.log('cancel') },
+                {
+                    text: '确定',
+                    onPress: () =>
+                        new Promise((resolve) => {
+                            this.props.history.push('/login')
+                            setTimeout(resolve, 500);
+                        }),
+                },
+            ])
+        }
+
+    }
     render() {
-        // console.log("11111")
-        // console.log(this.props)
         const {
             data,
             images,
         } = this.state;
         const Item = List.Item;
+        console.log(this.props.food)
+        console.log(this.props.food.filter((item, index) => index <= 3))
+        const food1 = this.props.food.filter((item, index) => index <= 3);
+        const food2 = this.props.food.filter((item, index) => index > 3 && index <= 7);
+        const food3 = this.props.food.filter((item, index) => index > 7 && index <= 11);
         return (
             <div className="all">
                 <div className="top">
                     <i className="iconfont left icon-addTodo-nav"></i>
-                    <div className="search">
+                    <div className="search" onClick={() => this.props.history.push("/search")}>
                         <div className="head">
                             <i className="iconfont center icon-sousuo"></i>
-                            <input className="input" type="text" placeholder="搜索 菜谱" />
+                            搜索 菜谱
+                            {/* <input className="input" type="text" placeholder="搜索 菜谱" /> */}
                         </div>
                     </div>
-                    <i className="iconfont right icon-cailan"></i>
+                    <i className="iconfont right icon-cailan" onClick={this.goBasket}></i>
                 </div>
-                <Grid itemStyle={{marginTop:'1rem'}} data={data} hasLine={false} />
+                <Grid onClick={this.goBasket} itemStyle={{ marginTop: '1rem' }} data={data} hasLine={false} />
                 <List className="my-list">
-                    <Item extra="更多" arrow="horizontal" onClick={() => { }}>热门兴趣·家常菜</Item>
+                    <Item extra="更多" arrow="horizontal" onClick={() => { this.props.history.push("/app/classify") }}>热门兴趣·家常菜</Item>
                 </List>
                 <div className="banner">
                     <ul className="nav cl">
-                        <li>
-                            <img src="https://pic.ecook.cn/web/258718661.jpg!wl280" alt="" />
-                            <p className="p1">猪皮炒大头菜</p>
-                            <p className="p2">食尚煮易</p>
-                        </li>
-                        <li>
-                            <img src="https://pic.ecook.cn/web/260012912.jpg!wl280" alt="" />
-                            <p className="p1">西葫芦炒海米</p>
-                            <p className="p2">爱吃兔儿</p>
-                        </li>
-                        <li>
-                            <img src="https://pic.ecook.cn/web/258991105.jpg!wl280" alt="" />
-                            <p className="p1">五花肉炒青椒</p>
-                            <p className="p2">俏厨娘悠佳儿</p>
-                        </li>
-                        <li>
-                            <img src="https://pic.ecook.cn/web/257732721.jpg!wl280" alt="" />
-                            <p className="p1">孜然蘑菇</p>
-                            <p className="p2">美食计划</p>
-                        </li>
+                        {
+                            food1.map((item, index) => {
+                                return (
+                                    <li key={index} onClick={() => this.goDetails(item)}>
+                                        <img style={{ height: "2.7rem" }} src={item.img} alt="" />
+                                        <p className="p1 sl">{item.title}</p>
+                                        <p className="p2">{item.author}</p>
+                                    </li>
+                                )
+                            })
+                        }
                     </ul>
                 </div>
                 <List className="my-list">
-                    <Item extra="更多" arrow="horizontal" onClick={() => { }}>热门兴趣·早餐</Item>
+                    <Item extra="更多" arrow="horizontal" onClick={() => { this.props.history.push("/app/classify") }}>热门兴趣·早餐</Item>
                 </List>
                 <WingBlank>
                     <Carousel className="space-carousel"
@@ -109,7 +130,7 @@ export class Home extends Component {
                         {images.map((val, index) => (
                             <a
                                 key={val}
-                                href=""
+                                // href=""
                                 style={{
                                     display: 'block',
                                     position: 'relative',
@@ -119,9 +140,10 @@ export class Home extends Component {
                                 }}
                             >
                                 <img
+                                    key={index}
                                     src={val.img}
                                     alt=""
-                                    style={{ width: '100%', verticalAlign: 'top' }}
+                                    style={{ width: '100%', height: '3.3rem', verticalAlign: 'top' }}
                                     onLoad={() => {
                                         // fire window resize event to change height
                                         window.dispatchEvent(new Event('resize'));
@@ -133,41 +155,32 @@ export class Home extends Component {
                     </Carousel>
                 </WingBlank>
                 <List className="my-list">
-                    <Item extra="更多" arrow="horizontal" onClick={() => { }}>热门兴趣·面食</Item>
+                    <Item extra="更多" arrow="horizontal" onClick={() => { this.props.history.push("/app/classify") }}>热门兴趣·面食</Item>
                 </List>
                 <div className="banner">
                     <ul className="nav cl">
-                        <li>
-                            <img src="https://pic.ecook.cn/web/258718661.jpg!wl280" alt="" />
-                            <p className="p1">猪皮炒大头菜</p>
-                            <p className="p2">食尚煮易</p>
-                        </li>
-                        <li>
-                            <img src="https://pic.ecook.cn/web/260012912.jpg!wl280" alt="" />
-                            <p className="p1">西葫芦炒海米</p>
-                            <p className="p2">爱吃兔儿</p>
-                        </li>
-                        <li>
-                            <img src="https://pic.ecook.cn/web/258991105.jpg!wl280" alt="" />
-                            <p className="p1">五花肉炒青椒</p>
-                            <p className="p2">俏厨娘悠佳儿</p>
-                        </li>
-                        <li>
-                            <img src="https://pic.ecook.cn/web/257732721.jpg!wl280" alt="" />
-                            <p className="p1">孜然蘑菇</p>
-                            <p className="p2">美食计划</p>
-                        </li>
+                        {
+                            food2.map((item, index) => {
+                                return (
+                                    <li key={index} onClick={() => this.goDetails(item)}>
+                                        <img style={{ height: "2.7rem" }} src={item.img} alt="" />
+                                        <p className="p1 sl">{item.title}</p>
+                                        <p className="p2">{item.author}</p>
+                                    </li>
+                                )
+                            })
+                        }
                     </ul>
                 </div>
                 <List className="my-list">
-                    <Item extra="更多" arrow="horizontal" onClick={() => { }}>菜谱推荐</Item>
+                    <Item extra="更多" arrow="horizontal" onClick={() => { this.props.history.push("/app/classify") }}>菜谱推荐</Item>
                 </List>
                 <ul className="list cl">
                     {
                         this.props.food.map((item, index) => {
                             return (
-                                <li key={index}>
-                                    <img className="img" src={item.img} alt="" />
+                                <li key={index} onClick={() => this.goDetails(item)}>
+                                    <img style={{ height: "2.5rem" }} className="img" src={item.img} alt="" />
                                     <p className="p1 sl">{item.title}</p>
                                     <p className="p2 sl">{item.author}</p>
                                 </li>

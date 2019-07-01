@@ -25,18 +25,21 @@
     line-height: 1.5rem;
     // box-shadow: #eee;
     box-shadow: 3px 5px 5px #e1e1e1;
-    i{
+    .touxiang{
       float: left;
       width: 1rem;
       height: 1rem;
       border-radius: 50%;
-      background-color: rgb(255, 224, 83);
+      // background-color: rgb(255, 224, 83);
       margin: 0.25rem 0.3rem 0;
 
     }
-    span {
-      float: left;
+    p {
+      // float: left;
+      // display: block;
       font-size: 0.5rem;
+      line-height: 0.8rem;
+      text-align: left;
     }
   }
 }

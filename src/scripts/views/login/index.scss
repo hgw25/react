@@ -20,15 +20,17 @@
 .loginbottom {
     margin-top: 2rem;
     .loginbottom-top {
+      text-align: center;
+      width: 100%;
       .line {
         width: 33%;
         border-bottom: 2px solid #e1e1e1;
-        float: left;
-        margin: 0.18rem 0.2rem;
+        display: inline-block;
+        margin: 0.08rem 1%;
       }
       .party {
         font-size: 0.24rem;
-        float: left;
+        display: inline-block;
         color: #aaa;
       }
     }
